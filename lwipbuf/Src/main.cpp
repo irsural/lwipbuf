@@ -130,15 +130,17 @@ int main(void)
 //  wmlog().rdbuf(&buf);
 
   string g = irs::generate_str(1000);
-  string t = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  wchar_t wt[] = L"Привет";
+  string t = "МНОооопаволповалполаомлсчолаыв";
+  wchar_t wt[] = L"Привет|Как дела?|Что делаешь?|Привет|Как дела?|";
 
+  bool sent = false;
+  
   while (true) {
     buf.tick(&netif);
 
-    if (buf.is_any_connected()) {
-      irs::mlog() << t << t << t << endl;
-//      wmlog() << wt << endl;
+    if (buf.is_any_connected() && !sent) {
+      irs::mlog() << g << endl;
+//      wmlog() << wt << wt << endl;
     }
   }
 }
