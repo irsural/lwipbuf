@@ -1014,7 +1014,7 @@
                     <item>a_sz</item>
                     <item>m_convert_buffer</item>
                     <item>converted_str</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>
