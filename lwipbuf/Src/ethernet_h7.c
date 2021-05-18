@@ -104,7 +104,7 @@ lan8742_IOCtx_t  LAN8742_IOCtx = {ETH_PHY_IO_Init,
                                ETH_PHY_IO_ReadReg,
                                ETH_PHY_IO_GetTick};
 
-LWIP_MEMPOOL_DECLARE(RX_POOL, 10, sizeof(struct pbuf_custom), "Zero-copy RX PBUF pool");
+LWIP_MEMPOOL_DECLARE(RX_POOL, 10, sizeof(struct pbuf_custom), "Zero-copy RX PBUF pool")
 
 /* Private functions ---------------------------------------------------------*/
 /*******************************************************************************

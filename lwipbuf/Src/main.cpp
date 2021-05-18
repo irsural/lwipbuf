@@ -57,30 +57,6 @@ extern "C" {
 #include <irsstrconv.h>
 #include <irsgenerators.h>
 
-class wzerobuf: public wstreambuf
-{
-public:
-  virtual int overflow(int = EOF)
-  {
-    return 0;
-  }
-  virtual wint_t underflow()
-  {
-    return 0;
-  }
-  virtual int sync()
-  {
-    return overflow();
-  }
-};
-
-wostream& wmlog()
-{ 
-  static wzerobuf buf;
-  static wostream mlog_obj(&buf);
-  return mlog_obj;
-}
-
 /* Private function prototypes -----------------------------------------------*/
 static void SystemClock_Config(void);
 static void BSP_Config(void);
@@ -125,14 +101,10 @@ int main(void)
   NetworkConfigurate(&netif);
   
   /* Start up a server */
-  irs::lwipbuf<char> buf;
+  irs::lwipbuf buf;
   irs::mlog().rdbuf(&buf);
-//  wmlog().rdbuf(&buf);
 
   string g = irs::generate_str(1000);
-  string t = "МНОооопаволповалполаомлсчолаыв";
-  wchar_t wt[] = L"Привет|Как дела?|Что делаешь?|Привет|Как дела?|";
-
   bool sent = false;
   
   while (true) {
@@ -140,7 +112,6 @@ int main(void)
 
     if (buf.is_any_connected() && !sent) {
       irs::mlog() << g << endl;
-//      wmlog() << wt << wt << endl;
     }
   }
 }

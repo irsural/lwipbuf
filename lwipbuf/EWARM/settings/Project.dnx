@@ -20,7 +20,7 @@
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>3594113100</Checksum>
+        <Checksum>169159377</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -129,8 +129,8 @@
         <mode>0</mode>
     </DisassembleMode>
     <Breakpoints2>
-        <Bp0>_ 1 "EMUL_DATA" "lwipbuf" 0 0 0 0 4294967295</Bp0>
-        <Bp1>_ 1 "EMUL_DATA_LOG" "lwipbuf" 0 0</Bp1>
+        <Bp0>_ 0 "EMUL_DATA" "lwipbuf" 0 0 0 0 4294967295</Bp0>
+        <Bp1>_ 0 "EMUL_DATA_LOG" "lwipbuf" 0 0</Bp1>
         <Bp2>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\mxsrclib\irsstrconv.h}.147.29" 0 0 1 "" 0 "" 0</Bp2>
         <Bp3>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\mxsrclib\irslwipbuf.h}.419.13" 0 0 1 "" 0 "" 0</Bp3>
         <Bp4>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\mxsrclib\irslwipbuf.h}.385.3" 0 0 1 "" 0 "" 0</Bp4>
