@@ -100,8 +100,15 @@ int main(void)
   struct netif netif;  
   NetworkConfigurate(&netif);
   
-  /* Start up a server */
+#if LWIP_DCHP
   irs::lwipbuf buf;
+#else
+  ip_addr_t ipaddr;
+  IP4_ADDR(&ipaddr, IP_ADDR0, IP_ADDR1, IP_ADDR2, IP_ADDR3);
+  irs::lwipbuf buf(IRSLIB_LWIPBUF_SIZE, IRSLIB_LOG_PORT, &ipaddr);
+#endif // LWIP_DCHP
+  
+  /* Start up a server */
   irs::mlog().rdbuf(&buf);
 
   string g = irs::generate_str(1000);
