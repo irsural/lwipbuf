@@ -70,7 +70,7 @@ static void NetworkConfigurate(struct netif* netif);
   * @retval None
   */
 int main(void)
-{ 
+{
   /* Configure the MPU attributes as Device memory for ETH DMA descriptors */
   MPU_Config();
 
@@ -83,23 +83,23 @@ int main(void)
        - Low Level Initialization
      */
   HAL_Init();
-  
+
   /* Configure the system clock to 400 MHz */
   SystemClock_Config();
-  
+
   uint32_t core_freq = HAL_RCC_GetSysClockFreq() >>
     D1CorePrescTable[(RCC->D1CFGR & RCC_D1CFGR_D1CPRE) >>
     POSITION_VAL(RCC_D1CFGR_D1CPRE_0)];
 
   irs::cpu_traits_t::frequency(core_freq);
   counter_init();
-  
+
   /* Configure the LCD, LEDs, ...*/
   BSP_Config();
 
-  struct netif netif;  
+  struct netif netif;
   NetworkConfigurate(&netif);
-  
+
 #if LWIP_DCHP
   irs::lwipbuf buf;
 #else
@@ -107,15 +107,29 @@ int main(void)
   IP4_ADDR(&ipaddr, IP_ADDR0, IP_ADDR1, IP_ADDR2, IP_ADDR3);
   irs::lwipbuf buf(IRSLIB_LWIPBUF_SIZE, IRSLIB_LOG_PORT, &ipaddr);
 #endif // LWIP_DCHP
-  
+
   /* Start up a server */
   irs::mlog().rdbuf(&buf);
 
   string g = irs::generate_str(1000);
   bool sent = false;
-  
+
   while (true) {
-    buf.tick(&netif);
+#if LWIP_NETIF_LINK_CALLBACK
+    Ethernet_Link_Periodic_Handle(&netif);
+#endif // LWIP_NETIF_LINK_CALLBACK
+
+#if LWIP_DHCP
+    DHCP_Periodic_Handle(&netif, IRSLIB_LOG_PORT);
+#endif // LWIP_DHCP
+
+    /* Получаем пакеты, полученные от клиентов на уровне ethernet. */
+    ethernetif_input(&netif);
+
+    /* Таймаут-функция. */
+    sys_check_timeouts();
+
+    buf.tick();
 
     if (buf.is_any_connected() && !sent) {
       irs::mlog() << g << endl;
@@ -128,7 +142,7 @@ static void NetworkConfigurate(struct netif* netif)
   ip_addr_t ipaddr;
   ip_addr_t netmask;
   ip_addr_t gw;
-  
+
 #if LWIP_DHCP
   ip_addr_set_zero_ip4(&ipaddr);
   ip_addr_set_zero_ip4(&netmask);
@@ -139,16 +153,16 @@ static void NetworkConfigurate(struct netif* netif)
   IP4_ADDR(&netmask, NETMASK_ADDR0, NETMASK_ADDR1 , NETMASK_ADDR2, NETMASK_ADDR3);
   IP4_ADDR(&gw, GW_ADDR0, GW_ADDR1, GW_ADDR2, GW_ADDR3);
 #endif
-  
+
   /* Initialize the LwIP stack */
   lwip_init();
-  
+
   /* Add the network interface */
   netif_add(netif, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
-  
+
   /* Registers the default network interface */
   netif_set_default(netif);
-  
+
   ethernet_link_status_updated(netif, 5008);
 }
 

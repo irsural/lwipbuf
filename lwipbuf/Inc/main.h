@@ -39,8 +39,10 @@
 #define IP_ADDR0   (uint8_t) 192
 #define IP_ADDR1   (uint8_t) 168
 #define IP_ADDR2   (uint8_t) 0
-#define IP_ADDR3   (uint8_t) 10
+#define IP_ADDR3   (uint8_t) 81
 
+   // 192.168.0.79
+   
 /*NETMASK*/
 #define NETMASK_ADDR0   (uint8_t) 255
 #define NETMASK_ADDR1   (uint8_t) 255
